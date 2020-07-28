@@ -1,0 +1,103 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+const firebase = require('firebase-admin');
+const debug = require('debug')('isagenix_events:server');
+const http = require('http');
+const https = require("https");
+const path = require('path');
+const fs = require('fs');
+
+try {
+  process.env['GOOGLE_APPLICATION_CREDENTIALS'] = path.join(__dirname, 'auth', 'firebase-adminsdk.json');
+  console.log('Setting env ... ' + path.join(__dirname, 'auth', 'firebase-adminsdk.json') + ' ... OK');
+  firebase.initializeApp();
+  console.log('Initializing firebase admin ... OK');
+} catch (e) {
+  console.error('Something went wrong, check firebase-adminsdk file provided by firebase console:', e);
+}
+
+// Setting up firebase
+
+// End setting up firebase
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+const app = require('../app');
+
+const port = 3007;
+
+
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string' ?
+      'Pipe ' + port :
+      'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  if (process.env.PROD) {
+    console.info('Server running on production environment');
+  } else {
+    console.info('Server running on development environment');
+  }
+  console.info('Listening on port: ' + port);
+  var addr = server.address();
+  var bind = typeof addr === 'string' ?
+      'pipe ' + addr :
+      'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
+
+/**
+ * Create placeholder for server
+ * @type {{}}
+ */
+let server = {};
+
+server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ * bananageek.mx
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
